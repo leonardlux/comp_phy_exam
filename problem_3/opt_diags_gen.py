@@ -20,8 +20,8 @@ def diags_gen_forward_euler():
     a_diags = ( a_main, a_sup, a_sub )
     
     b_main  = np.ones(c.n_x) * (1 - c.b - 2*c.a*c.b )
-    b_sup   = np.ones(c.n_x) * (c.a *c.a)
-    b_sub   = np.ones(c.n_x) * (c.a *c.a)
+    b_sup   = np.ones(c.n_x) * (c.a *c.b)
+    b_sub   = np.ones(c.n_x) * (c.a *c.b)
     b_diags = ( b_main, b_sup, b_sub )
 
     return a_diags, b_diags

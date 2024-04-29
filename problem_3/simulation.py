@@ -72,7 +72,7 @@ def tdma(A, b):
 
 
 # solve_simulation
-def solve_simulation(starting_distr, diags_gen ):
+def solve_simulation(starting_distr, diags_gen):
     boundary_condition = opt_bc.boundary_conditions_neumann
 
     # initalize U
@@ -88,6 +88,7 @@ def solve_simulation(starting_distr, diags_gen ):
         # Then, solve equation A * u^(n+1) = _u
         #U[n+1,:] = solve_banded((lower_bands,upper_bands), A_b, _u,)
         # the scipy version failed, therefore I used the solver provided in the github
+
         U[n+1,:] = tdma(A,_u)
     
     return U

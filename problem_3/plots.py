@@ -17,11 +17,14 @@ def plot_diff_times(
         t_diff_times = t_diff_times,
         log = False,
         legend = False,
+        func_t = None,
         ):
     fig = plt.figure()
     plt.title(title)
     for t in t_diff_times:
         plt.plot(c.x_g,U[t], label=f"t={c.delta_t*t}")
+        if func_t != None:
+            plt.plot(c.x_g, func_t(c.delta_t*t),color="grey")
     if legend:
         plt.legend()
     plt.xlabel("x")
@@ -83,7 +86,8 @@ def sketch(
         U,
         t_i_steps=100,
         t_i_max = c.n_t-1,
-        log_scale=False
+        log_scale=False,
+        func_t = None,
         ):
     def plotter(t):
         t = int(t)
@@ -91,6 +95,8 @@ def sketch(
             plt.yscale("log")
         fig = plt.figure(1, figsize = (10,6))
         plt.plot(c.x_g,U[t],label=f"at $t={t*c.delta_t}$")
+        if func_t != None:
+            plt.plot(c.x_g, func_t(c.delta_t*(t)),color="grey")
         plt.legend()
     slider = interact(plotter, t = (0, t_i_max, t_i_steps))
 

@@ -12,7 +12,7 @@ x_0 = 0.5
 n_x = 101
 n_t = 100
 
-delta_t = 0.01
+delta_t = 1e-3
 
 x_g, delta_x = np.linspace(x_min,x_max,n_x,retstep=True,)
 t_g = np.arange(0,n_t) * delta_t

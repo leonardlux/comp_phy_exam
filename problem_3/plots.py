@@ -8,21 +8,26 @@ from matplotlib import cm
 
 # Plots (simpel)
 
-t_diff_times = [0, 1, 5, 10, 25,50, 100]
+t_diff_times = [0, 1, 5, 10, 25,50, 99]
+t_diff_times = list(range(5,15))
 def plot_diff_times(
         U,
         title="",
         t=c.t_g,
-        t_diff_times = t_diff_times
+        t_diff_times = t_diff_times,
+        log = False,
+        legend = False,
         ):
     fig = plt.figure()
     plt.title(title)
     for t in t_diff_times:
-        plt.plot(c.x_g,U[t], label=f"t={c.dt*t}")
-    #plt.legend()
+        plt.plot(c.x_g,U[t], label=f"t={c.delta_t*t}")
+    if legend:
+        plt.legend()
     plt.xlabel("x")
     plt.ylabel("u(x)")
-    #plt.yscale("log")
+    if log:
+        plt.yscale("log")
     plt.show()
 
 def plot_mass(
@@ -85,7 +90,7 @@ def sketch(
         if log_scale:  
             plt.yscale("log")
         fig = plt.figure(1, figsize = (10,6))
-        plt.plot(c.x_g,U[t],label=f"at $t={t*c.dt}$")
+        plt.plot(c.x_g,U[t],label=f"at $t={t*c.delta_t}$")
         plt.legend()
     slider = interact(plotter, t = (0, t_i_max, t_i_steps))
 
@@ -103,7 +108,7 @@ def sketches(
         for U_sim in U_sims:
             plt.plot(c.x_g,U_sim.U[t],label=U_sim.title,alpha=0.9);
 
-        plt.title(f"at $t={t*c.dt}$")
+        plt.title(f"at $t={t*c.delta_t}$")
         plt.legend()
     interact(plotter, t = (0, t_i_max, t_i_steps));
     

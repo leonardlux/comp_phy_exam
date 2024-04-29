@@ -51,13 +51,46 @@ def generate_matrix_disjoint(sub_nodes = [11,10] ,connections = [-2,-1,1,2]):
 
 # generation of inital vectors 
 
+def inital_state_delta(nodes=21,delta_x = 10):
+    """
+    creates an inital state vector with all the charge located in one point
+    parameter:
+        nodes: amount of nodes of the network
+        delta_x: poision of the inital charge 
+    return:
+        inital_vector
+    """
+    inital_vector = np.zeros(nodes)
+    inital_vector[delta_x] = 1
+    return inital_vector
 
+def inital_state_task_f(nodes=21):
+    """
+    creates an inital state vector according to task f
+    parameter:
+        nodes: amount of nodes of the network
+        delta_x: poision of the inital charge 
+    return:
+        inital_vector
+    """
+    inital_vector = np.zeros(nodes)
+    for i in range(len(inital_vector)):
+        inital_vector[i] = 1/(i+1)
+    return inital_vector
+
+
+
+# simulating the system
 
 def simulate(matrix,inital_vector,steps):
     """
-    matrix: this is our transformation_matrix
-    inital_vector: starting vector
-    steps: amout of iterative steps
+    iterates 'steps'-time the system and saves all steps
+    parameter:
+        matrix: this is our transformation_matrix
+        inital_vector: starting vector
+        steps: amout of iterative steps
+    return:
+        time_development: 
     """
     time_development = [inital_vector,]
     vector = inital_vector
@@ -68,7 +101,6 @@ def simulate(matrix,inital_vector,steps):
 
 if __name__ == "__main__":
     # debug 
-    #print(generate_matrix_simple())
-    plt.imshow(generate_matrix_disjoint())
-    plt.show()
+    print(inital_state_delta())
+    print(inital_state_task_f())
 

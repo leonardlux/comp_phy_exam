@@ -64,6 +64,19 @@ def inital_state_delta(nodes=21,delta_x = 10):
     inital_vector[delta_x] = 1
     return inital_vector
 
+def inital_state_random(nodes=21,):
+    """
+    creates an intial state vector with random starting conditions, but normalized on 1
+    parameter:
+        nodes: amount of nodes of the network
+    return:
+        inital_vector
+    """
+    inital_vector = np.random.rand(21)
+    inital_vector /= np.sum(inital_vector)
+    return inital_vector
+
+
 def inital_state_task_f(nodes=21):
     """
     creates an inital state vector according to task f

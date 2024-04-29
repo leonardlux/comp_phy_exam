@@ -79,7 +79,6 @@ def inital_state_task_f(nodes=21):
     return inital_vector
 
 
-
 # simulating the system
 
 def simulate(matrix,inital_vector,steps):
@@ -98,6 +97,48 @@ def simulate(matrix,inital_vector,steps):
         vector = np.dot(matrix,vector)
         time_development.append(vector)
     return time_development
+
+
+
+# Finding eigenvalues
+
+
+def power_iteration(matrix, maxiter = 1000, tol = 1e-3):
+    """
+    power_interation, was the introduced method in the lectures and this function is orientated/taken from the accompyning github: https://github.com/nordam/ComputationalPhysics/blob/master/Notebooks/11%20-%20Eigenvalues%2C%20eigenvectors%20and%20SVD.ipynb
+    parameter: 
+        matrix: matrix, for which we want to find eigenvalue and vector
+        maxiter: maximum amount of iterations
+        tol: tolerance for convergence
+    returns:
+        eigval, eigvec, conv_status
+        status: True(converged)/False(did not converge in our tolerance)
+    """
+    
+    # Start with a random vector. It is quite unlikely that this
+    # will be exactly orthogonal to the desired eigenvector
+    b0 = np.random.rand(matrix.shape[1])
+    # normalise vector
+    b0 = b0 / np.linalg.norm(b0)
+    
+    for i in range(maxiter):
+        # Calculate product
+        b1 = np.dot(matrix,b0)
+        # Calculate "stretch" factor
+        b1_norm = np.linalg.norm(b1)
+        # Normalise vector
+        b1 = b1 / b1_norm
+        # check for convergence
+        if np.linalg.norm(b1 - b0) < tol:
+            return b1_norm, b1, False
+        else:
+            # Continue iterations
+            b0 = b1
+    # If we arrived here, iterations did not converge
+    return b1_norm, b1, True
+
+
+
 
 if __name__ == "__main__":
     # debug 

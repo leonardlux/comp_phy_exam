@@ -133,7 +133,7 @@ def power_iteration(matrix, maxiter = 1000, tol = 1e-3):
     # normalise vector
     b0 = b0 / np.linalg.norm(b0)
     
-    for i in range(maxiter):
+    for _ in range(maxiter):
         # Calculate product
         b1 = np.dot(matrix,b0)
         # Calculate "stretch" factor

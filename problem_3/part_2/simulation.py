@@ -1,11 +1,25 @@
 import numpy as np
-
 from scipy.sparse import diags   
 #from numba import jit
+
 import config as c
-
 import opt_boundary_conditions  as opt_bc
+import opt_right_side_functions as opt_rsf
 
+"""
+General note/commentary on computation and simulation: 
+During this exam I tried to follow the KISS priniciple.
+This includes using and adapting the allready working and tested parts from Assignment 1 and the working parts from the github of this lecture:
+https://github.com/nordam/ComputationalPhysics/blob/master/Notebooks/02%20-%20Numerical%20precision.ipynb 
+
+Moreover this is also the exact reason I decided against using numba. 
+Numba would increase the performance of the code, but at the expense of time needed to adapt everything to be able to work with numba.
+The could itself is not that slow (nothing needs more than a minute), therefore more optimization would just waste time and increase the probability of adding errors.
+"""
+
+
+
+# As mentioned early the following part is nearly completly adapted from my assignment 1 and the github repo.
 
 def build_matrix_from_diag(diags_list):
     # unpack list
@@ -15,6 +29,8 @@ def build_matrix_from_diag(diags_list):
     return M
 
 def gen_matricies(diags_gen, boundary_condition):
+    # this function is not necessarily needed, but is a bit of legacy code, which does not need a lot of power
+    # therefore it is allowed to stay. (And it makes this simulation.py more comparible to the previous one and the one in Assignment 1)
     # generate diags
     a_diags = diags_gen()
     # apply boundary conditons
@@ -24,10 +40,7 @@ def gen_matricies(diags_gen, boundary_condition):
     return A
 
 
-#taken from github of this course, after scipy did not work :( 
-# taken from my assignment 1 and I was refering to https://github.com/nordam/ComputationalPhysics/blob/master/Notebooks/02%20-%20Numerical%20precision.ipynb
-# and one of the notebooks in there
-
+# taken from github of this course, after scipy did not work :( 
 #@jit(nopython = True)
 def tdma_solver(a, b, c, d):
     # Solves Ax = d,
@@ -64,24 +77,6 @@ def tdma(A, b):
     x = tdma_solver(A.diagonal(-1), A.diagonal(0), A.diagonal(1), b)
     return x
 
-def g_na_g_k(v_vec):
-    return ((100/(1+ np.exp(c.gamma*(c.v_star - v_vec)))) + 1/5)/c.g_k
-
-def right_side_function(v_vec):
-    return (1-c.tau/c.delta_t) * v_vec + g_na_g_k(v_vec) * (v_vec - c.v_na_nerst) - c.v_k_nerst
-
-# for task d 
-# g_na(V) is depended on the position in space g_na(V)
-i_cutoff = np.argmin( np.abs(c.x_g - (c.x_0+c.x_dist)))
-
-def g_na_g_k_cutoff(v_vec):
-    vec = ((100/(1+ np.exp(c.gamma*(c.v_star - v_vec)))) + 1/5)/c.g_k
-    vec[:i_cutoff] = np.zeros(i_cutoff)
-    return vec
-
-def right_side_function_cutoff(v_vec):
-    return (1-c.tau/c.delta_t) * v_vec + g_na_g_k_cutoff(v_vec) * (v_vec - c.v_na_nerst) - c.v_k_nerst
-
 # solve_simulation
 def solve_simulation(starting_distr, diags_gen, cutoff = False):
     """
@@ -93,19 +88,17 @@ def solve_simulation(starting_distr, diags_gen, cutoff = False):
     U[0] = starting_distr
 
     # generate Matricies
+
     boundary_condition = opt_bc.boundary_conditions_neumann
+    # boundary conditions are hardcoded, because we do not need to change them
     A = gen_matricies(diags_gen, boundary_condition)
     
     for n in range(0, c.n_t-1):
-        # Calculate matrix-vector product: B * u^n = _u (right hand side)
+        # Calculate the function: F(u^n) = _u (right hand side)
         if cutoff:
-            _u = right_side_function_cutoff(U[n,:])
+            _u = opt_rsf.right_side_function_cutoff(U[n,:])
         else:
-            _u = right_side_function(U[n,:])
+            _u = opt_rsf.right_side_function(U[n,:])
         # Then, solve equation A * u^(n+1) = _u
-        #U[n+1,:] = solve_banded((lower_bands,upper_bands), A_b, _u,)
-        # the scipy version failed, therefore I used the solver provided in the github
-
         U[n+1,:] = tdma(A,_u)
-    
     return U

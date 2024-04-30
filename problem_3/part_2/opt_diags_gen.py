@@ -10,7 +10,7 @@ def diags_gen_backwards_euler():
     backwards euler = implicit
     with A * v^{n+1}  = F(v^n)
     
-    the function F, is calculated in the simulation part
+    the function F, is calculated in the simulation function, which lives in a different file (simluation.py)
 
     """
     # generate diagonals

@@ -1,7 +1,7 @@
 import numpy as np
 
-milli = 1
-#milli = 10**-3
+#milli = 1
+milli = 10**-3
 # given in exam
 tau     = 2  * milli
 lambda_value = 0.18 * milli

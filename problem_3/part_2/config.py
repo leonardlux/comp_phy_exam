@@ -11,6 +11,8 @@ x_min = 0
 L = x_max-x_min
 x_0 = (x_max-x_min)/2
 
+x_dist = 0.25 * milli # distance to the right of the impulse
+
 n_x = 301 
 n_t = 1000
 

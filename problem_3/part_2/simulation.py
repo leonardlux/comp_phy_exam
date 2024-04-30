@@ -70,8 +70,20 @@ def g_na_g_k(v_vec):
 def right_side_function(v_vec):
     return (1-c.tau/c.delta_t) * v_vec + g_na_g_k(v_vec) * (v_vec - c.v_na_nerst) - c.v_k_nerst
 
+# for task d 
+# g_na(V) is depended on the position in space g_na(V)
+i_cutoff = np.argmin( np.abs(c.x_g - (c.x_0+c.x_dist)))
+
+def g_na_g_k_cutoff(v_vec):
+    vec = ((100/(1+ np.exp(c.gamma*(c.v_star - v_vec)))) + 1/5)/c.g_k
+    vec[:i_cutoff] = np.zeros(i_cutoff)
+    return vec
+
+def right_side_function_cutoff(v_vec):
+    return (1-c.tau/c.delta_t) * v_vec + g_na_g_k_cutoff(v_vec) * (v_vec - c.v_na_nerst) - c.v_k_nerst
+
 # solve_simulation
-def solve_simulation(starting_distr, diags_gen):
+def solve_simulation(starting_distr, diags_gen, cutoff = False):
     """
     starting_distr is now a vector
     """
@@ -86,7 +98,10 @@ def solve_simulation(starting_distr, diags_gen):
     
     for n in range(0, c.n_t-1):
         # Calculate matrix-vector product: B * u^n = _u (right hand side)
-        _u = right_side_function(U[n,:])
+        if cutoff:
+            _u = right_side_function_cutoff(U[n,:])
+        else:
+            _u = right_side_function(U[n,:])
         # Then, solve equation A * u^(n+1) = _u
         #U[n+1,:] = solve_banded((lower_bands,upper_bands), A_b, _u,)
         # the scipy version failed, therefore I used the solver provided in the github

@@ -76,7 +76,6 @@ def inital_state_random(nodes=21,):
     inital_vector /= np.sum(inital_vector)
     return inital_vector
 
-
 def inital_state_task_f(nodes=21):
     """
     creates an inital state vector according to task f

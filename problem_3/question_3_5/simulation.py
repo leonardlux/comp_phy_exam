@@ -1,21 +1,19 @@
 import numpy as np
-
 from scipy.sparse import diags   
 #from numba import jit
+
 import config as c
-
-
-import opt_initial_values     as opt_sv
-import opt_diags_gen    as opt_dg
 import opt_boundary_conditions  as opt_bc
-#from plots import plot_mass, plot_diff_times
 
+# this function was more or less already working in assigment 1
+# I just adapted it, but some of the extra complexity is therefore not needed.
+# But never change a running system. 
 
 def build_matrix_from_diag(diags_list):
     # unpack list
     main_diag, sup_diag, sub_diag, = diags_list
     # build a banded matrix using the different diagonals
-    M = diags((sub_diag, main_diag, sup_diag), offsets = (-1, 0, 1),)# .toarray()
+    M = diags((sub_diag, main_diag, sup_diag), offsets = (-1, 0, 1),)
     return M
 
 def gen_matricies(diags_gen, boundary_condition):
@@ -32,7 +30,6 @@ def gen_matricies(diags_gen, boundary_condition):
 
 #taken from github of this course, after scipy did not work :( 
 # taken from my assignment 1 and I was refering to https://github.com/nordam/ComputationalPhysics/blob/master/Notebooks/02%20-%20Numerical%20precision.ipynb
-# and one of the notebooks in there
 
 #@jit(nopython = True)
 def tdma_solver(a, b, c, d):
@@ -73,13 +70,14 @@ def tdma(A, b):
 
 # solve_simulation
 def solve_simulation(starting_distr, diags_gen):
-    boundary_condition = opt_bc.boundary_conditions_neumann
 
     # initalize U
     U  = np.zeros((c.n_t,c.n_x),)
     U[0] = starting_distr()
 
     # generate Matricies
+    boundary_condition = opt_bc.boundary_conditions_neumann
+    # boundary conditions are hardcoded, because we do not need to change them
     A, B = gen_matricies(diags_gen, boundary_condition)
     
     for n in range(0, c.n_t-1):

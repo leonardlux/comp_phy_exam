@@ -10,7 +10,7 @@ def diags_gen_forward_euler():
     forward euler = explicit
     with A * v^{n+1}  = B * v^n
     
-    for forward explicit A is the unit matrix, but because I had an allready working system I just did not remove A.
+    for forward/explicit A is the unit matrix, but because I had an already working system I just did not remove A.
     """
     
     # generate diagonals
@@ -32,7 +32,8 @@ def diags_gen_backwards_euler():
     backwards euler = implicit
     with A * v^{n+1}  = B * v^n
     
-    for backwards implicit B is the unit matrix, but because I had an allready working system I just did not remove A.
+    for backwards/implicit B is the unit matrix, but because I had an already working system I just did not remove B.
+    (Multiplication with uni Matrix does not change anything)
     """
     # generate diagonals
     a_main = np.ones(c.n_x) * (2 * c.a * c.b + 1) / (1 - c.b)

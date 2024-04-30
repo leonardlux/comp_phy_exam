@@ -1,6 +1,9 @@
 import numpy as np
 """
 ## Boundary conditions
+This is a mathematical sound way to compute the boundary conditions, regardless what the values of the matrix are. 
+I derived this term for assignment 1 and will therefore not go into detail on why this works.
+This is also rather trivial.
 """
 
 def boundary_conditions_neumann(diags_list):

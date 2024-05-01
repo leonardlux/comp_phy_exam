@@ -9,8 +9,8 @@ x_max = 1
 x_min = 0
 L = x_max-x_min
 
-n_x = 301
-n_t = 200
+n_x = 201
+n_t = 2000
 
 delta_t = 1e-4
 

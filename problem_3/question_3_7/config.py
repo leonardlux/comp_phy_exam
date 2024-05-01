@@ -1,5 +1,5 @@
 import numpy as np
-# i defined this factor to minimize the sources of errors
+# I defined this factor to minimize the sources of errors
 milli = 10**-3
 
 

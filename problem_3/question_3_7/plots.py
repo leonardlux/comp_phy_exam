@@ -19,6 +19,7 @@ def plot_diff_times(
         alpha=1,
         ls = "-",
         differential = False,
+        vline_cutoff = False,
         ):
     fig = plt.figure(figsize=(5,4))
     
@@ -36,6 +37,8 @@ def plot_diff_times(
             else:
                 plt.plot(c.x_g/c.milli, func_t(c.delta_t*t)/c.milli,color="black",alpha=0.5)
 
+    if vline_cutoff:
+        plt.axvline((c.x_0 + c.x_dist)/c.milli,c="grey",alpha=0.7,label="$x_0 + x_{dist}$")
     if legend:
         plt.legend()
     plt.xlabel("$x$ in mm")

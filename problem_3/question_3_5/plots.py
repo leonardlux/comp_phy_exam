@@ -28,7 +28,7 @@ def plot_diff_times(
     analy_label = False
     for t in t_diff_times:
         if differential:
-            U[t] = U[t] - func_t(c.delta_t*t)
+            U[t] = (U[t] - func_t(c.delta_t*t))*10**3
         plt.plot(c.x_g,U[t],label=f"$t={c.delta_t*t*10**3:.1f}$ms",alpha=alpha,ls=ls,lw=1,marker=".")
         if func_t != None and not differential:
             if not analy_label:
@@ -43,7 +43,7 @@ def plot_diff_times(
     if not differential:
         plt.ylabel("$V(x,t)$ in V")
     else: 
-        plt.ylabel("$V(x,t)-V_{analy.}(x,t)$ in V")
+        plt.ylabel("$V(x,t)-V_{analy.}(x,t)$ in mV")
     if log:
         plt.yscale("log")
     if filename!="":

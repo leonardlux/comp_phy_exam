@@ -20,7 +20,7 @@ t_g = np.arange(0,n_t) * delta_t
 tau     = 2  * milli
 lambda_value = 0.18 * milli
 x_dist = 0.25 * milli # distance to the right of the impulse
-i_cutoff = np.argmin( np.abs(x_g - (x_0+x_dist))) # cutoff of the g_na function
+i_cutoff = int((x_0+x_dist-x_min)/delta_x) # cutoff of the g_na function
 
 gamma = 0.5  * milli**-1 # (mV)^-1! therefore milli**-1
 v_star = -40  * milli
